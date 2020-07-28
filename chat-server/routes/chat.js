@@ -43,4 +43,20 @@ router.post('/', function (req, res, next) {
     })
 });
 
+router.delete('/:id', function (req, res, next) {
+  Chat.findByIdAndRemove({ chatId: req.body.id })
+    .then(result => {
+      res.json({
+        error: false,
+        chat: result
+      })
+    })
+    .catch(err => {
+      res.json({
+        error: true,
+        message: err
+      })
+    })
+});
+
 module.exports = router;

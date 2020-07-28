@@ -2,16 +2,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const mongoose = require('mongoose');
-
+var mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/chatdb', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false
 })
-    .then(() => console.log('connected to database'))
-    .catch((err) => console.log('Error'))
+    .then(() => console.log(`connected to database`))
+    .catch((err) => console.error('Error'));
 
 var indexRouter = require('./routes/index');
 var chatRouter = require('./routes/chat');
