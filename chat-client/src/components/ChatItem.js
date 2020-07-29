@@ -14,7 +14,7 @@ function dateConvert(date) {
 }
 
 function ChatItem(props) {
-    // console.log(props)
+    console.log("item", props.message)
     return (
         <div className={`d-flex mb-4 ${props.index % 2 === 0 ? "justify-content-end" : "justify-content-start"}`}>
             <div className="img_cont_msg">
@@ -26,7 +26,13 @@ function ChatItem(props) {
                     {props.message.message}
                     <span className="msg_time">{dateConvert(props.message.date)} {props.message.time}</span>
                 </div>
-
+                {!props.message.sent &&
+                    <div className="btn_resend" >
+                        <button className="btn btn-outline-success btn-sm circle"
+                            onClick={() => props.resend(props.message)}>
+                            <i className="fas fa-redo-alt"></i>
+                        </button>
+                    </div>}
             </div>
         </div>
     )

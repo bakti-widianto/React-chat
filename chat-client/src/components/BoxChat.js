@@ -59,7 +59,7 @@ export default class BoxChat extends Component {
                         data: state.data.map(item => {
                             if (item.id === id) {
                                 item.sent = false
-                                console.log(data)
+                                // console.log(data)
                             }
                             return item
                         })
@@ -71,7 +71,28 @@ export default class BoxChat extends Component {
     }
 
     resendChat = (data) => {
+        console.log("resend", data)
 
+        request.post('/chat', {
+            id: data.id,
+            name: data.name,
+            message: data.message
+        })
+            .then(function (response) {
+                this.setState((state, props) => {
+                    return {
+                        data: state.data.map(item => {
+                            if (item.id === data.id) {
+                                item.sent = true;
+                            }
+                            return item
+                        })
+                    }
+                })
+            }.bind(this))
+            .catch(function (err) {
+                console.log(err)
+            })
     }
 
     render() {
@@ -86,7 +107,7 @@ export default class BoxChat extends Component {
                     </div>
 
                     <div className="card-body msg_card_body">
-                        <ListChat messages={this.state.data}></ListChat>
+                        <ListChat messages={this.state.data} resend={this.resendChat} ></ListChat>
                     </div>
                     <FormChat add={this.addChat} />
                 </div>
