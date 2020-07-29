@@ -9,12 +9,12 @@ function dateConvert(date) {
     } else if (date === moment().subtract(1, 'days').format('YYYY-MM-DD')) {
         return date = 'Yesterday'
     } else {
-        date = moment(date).format("MMMM Do, YYYY")
+        return date = moment(date).format("MMMM Do, YYYY")
     }
 }
 
 function ChatItem(props) {
-    console.log(props)
+    // console.log(props)
     return (
         <div className={`d-flex mb-4 ${props.index % 2 === 0 ? "justify-content-end" : "justify-content-start"}`}>
             <div className="img_cont_msg">
@@ -24,7 +24,7 @@ function ChatItem(props) {
                 <h6 className="name_cotainer nama">{props.message.name.toUpperCase()}</h6>
                 <div className="msg_cotainer">
                     {props.message.message}
-                    <span className="msg_time">{dateConvert(props.message.date)}, {props.message.time}</span>
+                    <span className="msg_time">{dateConvert(props.message.date)} {props.message.time}</span>
                 </div>
 
             </div>
