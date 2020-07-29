@@ -250,6 +250,19 @@ background-color: rgba(0,0,0,0.2);
 .form{
   margin-top: 10px;
   }
+  
+.btn_resend{
+  margin-top: 3px;
+    margin-bottom: auto;
+    margin-left: 78px;
+    position: relative;
+    
+   }
+   .circle{
+    border-radius: 20px;
+    padding: .1rem .3rem;
+    color:rgb(255, 247, 247);
+    } 
 
 @media(max-width: 576px){
   .contacts_card{
