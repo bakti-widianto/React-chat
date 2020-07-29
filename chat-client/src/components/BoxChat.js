@@ -36,13 +36,43 @@ export default class BoxChat extends Component {
             })
     }
 
-    // addTodo(todo) {
+    addChat = (data) => {
+        const id = Date.now();
+        // add chat in Front-end
+        this.setState((state, props) => ({
+            data: [...state.data, { id: id, name: data.name, message: data.message, sent: true }]
 
-    // }
+        }))
 
-    // resendTodo = (todo) => {
+        //add chat to server
+        request.post('/chat', {
+            id: id,
+            name: data.name,
+            message: data.message
+        })
+            .then(function (response) {
 
-    // }
+            })
+            .catch(function (err) {
+                this.setState((state, props) => {
+                    return {
+                        data: state.data.map(item => {
+                            if (item.id === id) {
+                                item.sent = false
+                                console.log(data)
+                            }
+                            return item
+                        })
+                    }
+                });
+            }.bind(this))
+
+
+    }
+
+    resendChat = (data) => {
+
+    }
 
     render() {
 
@@ -58,7 +88,7 @@ export default class BoxChat extends Component {
                     <div className="card-body msg_card_body">
                         <ListChat messages={this.state.data}></ListChat>
                     </div>
-                    <FormChat />
+                    <FormChat add={this.addChat} />
                 </div>
             </div>
         )
