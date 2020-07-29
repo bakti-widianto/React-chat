@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import ListChat from './ListChat';
 
 const request = axios.create({
     baseURL: 'http://localhost:3002/api',
@@ -12,6 +13,7 @@ export default class BoxChat extends Component {
         super(props);
         this.state = { data: [] }
 
+
     }
 
     componentDidMount() {
@@ -22,9 +24,10 @@ export default class BoxChat extends Component {
     loadChat() {
         request.get('/chat')
             .then(function (response) {
-                //   let messages = response.data.data.map(item => ({ ...item, sent: true }))
-                //   this.setState({ data: messages });
-                console.log(response)
+                let messages = response.data.data.map(item => ({ ...item, sent: true }))
+                this.setState({ data: messages });
+                // console.log(messages)
+                console.log('BOX',this.state)
             }.bind(this))
             .catch(function (error) {
                 alert(error)
@@ -51,7 +54,7 @@ export default class BoxChat extends Component {
                     </div>
 
                     <div className="card-body">
-
+                        <ListChat messages={this.state.data}></ListChat>
                     </div>
 
                 </div>

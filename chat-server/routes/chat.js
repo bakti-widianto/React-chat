@@ -15,7 +15,7 @@ router.get('/', function (req, res, next) {
           name: item.name,
           message: item.message,
           date: moment(item.createdAt).format("YYYY-MM-DD"),
-          time: moment(item.createdAt).format("HH:mm:ss")
+          time: moment(item.createdAt).format("LT")
         }
       })
       res.json({
