@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from '../logo.svg';
 import moment from 'moment';
-// import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 
 function dateConvert(date) {
     if (date === moment().format('YYYY-MM-DD')) {
@@ -22,12 +22,12 @@ function ChatItem(props) {
             </div>
             <div >
                 <h6 className="name_cotainer nama">{props.message.name.toUpperCase()}</h6>
-                <div className="msg_cotainer">
-                    {props.message.message}
+                <div className="msg_cotainer" onDoubleClick={() => props.delete(props.message.id)}>
+                    <ReactMarkdown source={props.message.message} />
                     <span className="msg_time">{dateConvert(props.message.date)} {props.message.time}</span>
                 </div>
                 {!props.message.sent &&
-                    <div className="btn_resend" >
+                    <div className="btn_resend">
                         <button className="btn btn-outline-success btn-sm circle"
                             onClick={() => props.resend(props.message)}>
                             <i className="fas fa-redo-alt"></i>

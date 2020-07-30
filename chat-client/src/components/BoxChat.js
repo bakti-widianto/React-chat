@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2'
 import ListChat from './ListChat';
 import FormChat from './FormChat'
 
@@ -29,7 +30,7 @@ export default class BoxChat extends Component {
                 let messages = response.data.data.map(item => ({ ...item, sent: true }))
                 this.setState({ data: messages });
                 // console.log(messages)
-                console.log('BOX', this.state)
+                // console.log('BOX', this.state)
             }.bind(this))
             .catch(function (error) {
                 alert(error)
@@ -71,7 +72,7 @@ export default class BoxChat extends Component {
     }
 
     resendChat = (data) => {
-        console.log("resend", data)
+        // console.log("resend", data)
 
         request.post('/chat', {
             id: data.id,
@@ -95,6 +96,26 @@ export default class BoxChat extends Component {
             })
     }
 
+    deleteChat = (id) => {
+        console.log(id)
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this message",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.value) {
+              //delete front-end
+              this.setState((state, props)=>({
+                  data: state.data.filter(item => item.id !== id)
+              }))
+            }
+          })
+    }
+
     render() {
 
         return (
@@ -107,7 +128,7 @@ export default class BoxChat extends Component {
                     </div>
 
                     <div className="card-body msg_card_body">
-                        <ListChat messages={this.state.data} resend={this.resendChat} ></ListChat>
+                        <ListChat messages={this.state.data} resend={this.resendChat} delete={this.deleteChat} ></ListChat>
                     </div>
                     <FormChat add={this.addChat} />
                 </div>
