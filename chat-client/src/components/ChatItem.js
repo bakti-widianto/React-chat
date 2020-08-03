@@ -14,7 +14,7 @@ function dateConvert(date) {
 }
 
 function ChatItem(props) {
-    console.log("item", props.message)
+    // console.log("item", props.message)
     return (
         <div className={`d-flex mb-4 ${props.index % 2 === 0 ? "justify-content-end" : "justify-content-start"}`}>
             <div className="img_cont_msg">

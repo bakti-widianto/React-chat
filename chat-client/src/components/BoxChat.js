@@ -1,27 +1,45 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2'
+import io from 'socket.io-client'
 import ListChat from './ListChat';
 import FormChat from './FormChat'
 
 
+var socket = io.connect('http://localhost:3002/')
 const request = axios.create({
     baseURL: 'http://localhost:3002/api',
     timeout: 1000,
     headers: {}
 });
 
+// const typingTimerLength = 400; //ms
+
+
 export default class BoxChat extends Component {
     constructor(props) {
         super(props);
         this.state = { data: [] }
-
-
     }
 
     componentDidMount() {
         // console.log('test')
         this.loadChat()
+
+        socket.on('chat', function (data) {
+            console.log(data)
+            this.setState((state, props) => ({
+                data: [...state.data, { ...data, sent: true }]
+            }))
+        }.bind(this))
+
+        socket.on('delete-chat-frontend', function (id) {
+            this.setState((state, props) => ({
+                data: state.data.filter(item => {
+                    return item.id !== id.id
+                })
+            }))
+        }.bind(this))
     }
 
     loadChat() {
@@ -44,6 +62,12 @@ export default class BoxChat extends Component {
             data: [...state.data, { id: id, name: data.name, message: data.message, sent: true }]
 
         }))
+
+        socket.emit('chats', {
+            id: id,
+            name: data.name,
+            message: data.message
+        })
 
         //add chat to server
         request.post('/chat', {
@@ -97,7 +121,7 @@ export default class BoxChat extends Component {
     }
 
     deleteChat = (id) => {
-        console.log(id)
+        // console.log(id)
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this message",
@@ -106,14 +130,36 @@ export default class BoxChat extends Component {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, delete it!'
-          }).then((result) => {
+        }).then((result) => {
             if (result.value) {
-              //delete front-end
-              this.setState((state, props)=>({
-                  data: state.data.filter(item => item.id !== id)
-              }))
+                //delete front-end
+                this.setState((state, props) => ({
+                    data: state.data.filter(item => item.id !== id)
+                }))
+
+                socket.emit('delete chat backend', {
+                    id
+                })
+
+                //delete back-end
+                request.delete('/chat/' + id)
+                    .then(response => {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        )
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            type: 'warning',
+                            text: 'connection problem try again later',
+                            showConfirmationButton: false,
+                            timer: 1200
+                        })
+                    })
             }
-          })
+        })
     }
 
     render() {

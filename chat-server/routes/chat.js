@@ -43,12 +43,14 @@ router.post('/', function (req, res, next) {
     })
 });
 
+
 router.delete('/:id', function (req, res, next) {
-  Chat.findByIdAndRemove({ chatId: req.body.id })
+  const id = parseInt(req.params.id)
+  Chat.findOneAndRemove({ chatId: id })
     .then(result => {
       res.json({
         error: false,
-        chat: result
+        delete: result
       })
     })
     .catch(err => {
