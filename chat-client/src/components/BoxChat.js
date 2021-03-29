@@ -169,7 +169,7 @@ export default class BoxChat extends Component {
                 <div className="card">
                     <div className="card-header text-center">
                         <div>
-                            <h4> Simple Web Chat With React  </h4>
+                            <h4> Simple Web React Chat  </h4>
                         </div>
                     </div>
 
